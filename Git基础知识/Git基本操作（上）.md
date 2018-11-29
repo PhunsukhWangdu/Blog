@@ -1,4 +1,4 @@
-#Git基本操作（上）
+# Git基本操作（上）
 
 历史：Linus的作者创建了开源的Linux，02年以前代码管理都依赖手动合并，后来管理不了了，拒绝SVN和CVS这些中央式版本控制的工具(原因如下表格)，采用免费授权给Linux社区的BitKeeper工具，再后来05年社区的大牛要破解BitKeeper被人家公司发现要收回BitKeeper对Linux的免费的使用权，Linus一口气两周内用C写了一个分布式的版本控制系统——Git。接着08年GitHub问世，利用Git为无数开源项目提供代码的托管存储
 
@@ -21,7 +21,7 @@
 *特别注意，分布式版本控制系统的远端仓库，有时候也被叫“中央服务器”，不同于集中式的中央服务器，分布式中它可以理解成一个中转站，用来协作同步各个本地仓库的代码，实际上任何一个服务器都可以取代它的作用，只是为了方便大家“交换”代码*
 
 
-##clone远程仓库、创建本地仓库
+## clone远程仓库、创建本地仓库
 
 #### 涉及到的命令：git clone/ git init/ git remote add origin ####
 
@@ -41,7 +41,7 @@ clone下来的项目我们就可以正常开发了，当然我们也可以在本
 
 	git remote add origin https://github.com/****.git 
 
-##工作目录 暂存区 版本库 远程仓库
+## 工作目录 暂存区 版本库 远程仓库
 
 #### 涉及到的命令：git diff ####
 
@@ -75,7 +75,8 @@ clone下来的项目我们就可以正常开发了，当然我们也可以在本
 	git diff HEAD 可以查看工作区和版本库的差别
 	git diff --cached(===staged) 比较的是暂存区和版本库的差别
 
-##一个简单的流程
+## 一个简单的流程
+
 #### 涉及到的命令：git status/ git add/ git commit/ git log/ git pull /git push ####
 
 #### git status ####
@@ -173,7 +174,8 @@ origin是远程仓库的代指，master是远程仓库上的分支名，这里�
 远程仓库的initial commit是第一条记录，我们刚提交的在后面
 
 
-##commit信息历史
+## commit信息历史
+
 #### 涉及到的命令：git log####
 
 ![](https://i.imgur.com/ORGPyna.png)
@@ -226,7 +228,8 @@ HEAD同时也指向一个分支，图中的HEAD——>master，表示当前工�
 commit信息这里就粗略的说到这吧。接下来接着说说branch
 
 
-##branch分支创建和切换
+## branch分支创建和切换
+
 #### 涉及到的命令：git branch/git checkout/git checkout -b/git branch -d####
 
 	git branch 新的分支名//创建分支
@@ -249,7 +252,8 @@ commit信息这里就粗略的说到这吧。接下来接着说说branch
 
 我们删除了一个分支后，并不会删除这个分支上的提交记录，其实branch这个分支的概念，更确切的说是一个引用，是一个指向，指向一串的提交记录，我们删除了分之后只是删除了对这个分支包含的提交记录的一个引用，虽然说我们没有删除它们，但是Git的回收机制会定期清理那些不在任何分支上的commit记录。
 
-##merge 合并冲突
+## merge 合并冲突
+
 #### 涉及到的命令：git merge/git merge --abort####
 
 merge意思为合并，把目标分支合并到当前分支，一般在我们分支协作开发，某一分支的开发完成可以合并如主流程的时候，这样去操作。
@@ -314,7 +318,8 @@ src/test.js出现了 "merge conflict"合并冲突，自动合并失败，要求 
 
 [https://blog.csdn.net/andyzhaojianhui/article/details/78072143](https://blog.csdn.net/andyzhaojianhui/article/details/78072143 "git merge-快进合并和非快进合并")
 
-##rebase 避免出现分支的合并
+## rebase 避免出现分支的合并
+
 #### 涉及到的命令：git rebase####
 
 通过merge来协作开发，历史记录会出现很多分支，如果想避免这样导致过乱，可是采用rebase命令。
