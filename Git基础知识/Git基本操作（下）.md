@@ -1,4 +1,51 @@
-##丢弃之前的提交reset --hard
+## 修正commit信息
+
+#### 涉及到的命令： git commit --amend####
+
+git commit --amend是对上一条commit命令进行修正。当我们执行这条命令时时，Git会把当前暂存区的内容和这次commit的新内容合并创建一个新的commit，把我们当前HEAD指向的最新的commit替换掉。例如我们当前最新一条commit记录中，我们输入错了提交信息，想要修改，又或者我们提交错了一点东西，又不想生成一个新的commit记录，我们都可以使用这个命令。
+
+这里假设我们需要修复一个上次提交错的文件，同时想修改上一个commit的信息
+
+
+在我们修复了错误文件test.js后,执行：
+
+	git add src/test.js
+
+然后我们commit这条修改：
+
+	git commit --amend
+
+接着我们又一次进入commit的提交信息编辑页面
+
+![](https://i.imgur.com/UnJxTc3.jpg)
+
+记得上篇文章讲的commit编辑输入信息那里的内容吗？来顺一下
+
+#### vim的操作 ####
+
+1.输入i进入插入模式，对上一条commit信息的内容进行修改
+
+2.按下ESC键，退出编辑模式，切换到命令模式。 
+
+3.在命令模式下键入"ZZ"或者":wq"保存修改并且退出 vim。 
+
+4.只想保存文件：则键入":w"，回车后底行会提示写入操作结果，并保持停留在命令模式。
+
+5.放弃所有文件修改：按下ESC键进入命令模式，键入":q!"回车后放弃修改并退出vim
+
+6.放弃所有文件修改，但不退出 vi：按下ESC键进入命令模式，键入":e!"
+
+好，我们继续上面amend的部分，执行命令：
+
+![](https://i.imgur.com/SwCAqn7.png)
+
+看下我们的commit记录
+
+![](https://i.imgur.com/Jv0eXGt.png)
+
+amend用于修改上一条commit信息时，实际上并不是对上一个commit修改，而是生成新的对它进行替换，例如我们对已经push到远端的commit记录在本地仓库进行--amend操作之后，直接push到远端仓库是不会成功的，因为本地丢失了远端仓库那个我们替换的commit
+
+## 丢弃之前的提交reset --hard
 
 最新一次的commit的内容有问题，想要丢弃这次提交，先log看下提交记录：
 
