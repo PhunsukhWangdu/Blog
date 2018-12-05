@@ -133,36 +133,61 @@ amend用于修改上一条commit信息时，实际上并不是对上一个commit
 
 最新一次的commit的内容有问题，想要丢弃这次提交，先log看下提交记录：
 
-【21】
+![](https://i.imgur.com/PwnGbwh.png)
 
-如果想要恢复到最新一次前面的那次commit记录，也就是the third，执行：
+如果想要恢复到HEAD前面的那次commit记录，也就是feature4's seccond commit，执行：
 
-	git reset --hard HEAD^
+	git reset HEAD~1
 
-head指向最新的一个commit，也就是途中的wrong commit,^标识从当前位置向前数，有几个就是向前数几个，所以上面的命令的意思就是恢复到head对应的的commit前面的commit，也就是the third。
+执行看下结果,log看下记录：
 
-执行结果：
-
-![](./images/resethardhead1.png)
-
-这时我们git log看下commit的记录：
-
-![](./images/1afterresethard.png)
-
-同理如果要恢复到head前面的第二个commit，也就是the second,在head后两个^:
-
-	git reset --hard HEAD^^
+![](https://i.imgur.com/gpksVtQ.png)
 	
 被撤销的那条提交并没有消失，只是log不再展现出来，因为已经被丢弃。如果你在撤销它之前记下了它的 SHA-1 码，那么还可以通过这个编码找到它，执行如下：
 
-![](./images/1.png)
+![](https://i.imgur.com/TMjqjSB.png)
 
-再log看下commit记录，wrongcommit已经重新出现在记录里，并且head指向它：
+log看下commit记录，我们丢弃的那条已经恢复，并且head指向它
 
-![](./images/2.png)
+### 参数 --hard --soft --mixed
 
-	git reset --hard 目标commit
+回顾一下文章上讲的工作目录（working area),暂存区（index)和本地版本库（HEAD）的区别，这里reset后面跟的参数影响的正是这三者内部的数据状态。
 
+#### 1. git reset --soft
+
+执行这句命令时，实际上我们只是把本地版本库，指向了我们要指向的那个commit，而暂存区和本地工作目录是一致的，保留着我们的文件修改，操作看下：
+
+![](https://i.imgur.com/38sr52n.png)
+
+执行完，status看下工作区状态，我们可以看到现在我们的暂存区有一个待commit的文件，证明现在本地版本库和暂存区是不一致的，而这个不一致刚好是我们丢弃的那次commit修改的内容，同时我们并没有看到有文件是"changes not staged for commit",说明当前我们的工作目录和暂存区文件状态是一致的。
+
+总结如下 HEAD(本地版本库） != INDEX （暂存区文件内容）== WORKING （本地工作目录）
+
+![](https://i.imgur.com/kTHsI7v.png)
+
+#### 2. git reset --hard
+
+执行这句命令时，不仅本地版本库会指向我们制定的commit记录，同时暂存区和本地工作目录也会同步变化成我们制定的commit记录的状态，期间所有的更改全部丢失，操作看下：
+
+![](https://i.imgur.com/G7uBUFy.png)
+
+执行完我们看到，暂存区和工作目录都没有文件记录
+
+总结如下 HEAD(本地版本库） == INDEX （暂存区文件内容）== WORKING （本地工作目录）
+
+![](https://i.imgur.com/a4N2bJZ.png)
+
+#### 3. git reset --mixed(default）
+
+--mixed是reset的默认参数，也就是当我们不指定任何参数时的参数。它将我们本地版本库指向我们制定的commit记录，同时暂存区也同步变化，而本地工作目录并不变化，所有我们丢弃的commit记录涉及的文件更改都会保存在本地工作目录working area中，所以数据不会丢失，但是所有改动都未被添加进暂存区，方便我们检查修改，操作看下：
+
+![](https://i.imgur.com/6htMffR.png)
+
+执行完我们看到，在工作目录中有文件修改，而暂存区和本地版本库与我们指定的commit记录保持一致
+
+总结如下 HEAD(本地版本库） == INDEX （暂存区文件内容）！= WORKING （本地工作目录）
+
+![](https://i.imgur.com/z8NiYt9.png)
 
 参考文章：
 https://www.jianshu.com/p/4f8b56d0fd5b
