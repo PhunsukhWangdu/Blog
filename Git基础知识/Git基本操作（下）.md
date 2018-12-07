@@ -12,7 +12,7 @@
 
 5.放弃修改并退出vim：":q!"
 
-6.放弃所有文件修改，但不退出 vi：":e!"
+6.放弃所有文件修改，但不退出 vim：":e!"
 
 -----
 
@@ -44,7 +44,7 @@ pick的意思是直接应用，我们如果要修改某次的提交信息，需�
 
 ![](https://i.imgur.com/dtgDi42.png)
 
-这里Git在执行到"feature1 first commit"便停了下来，提示我们可以通过amend来修改这条commit记录，amend就是用来修改HEAD所指向的这条最新记录，这个具体下面会讲,我们输入git commit --amend，然后进入编辑页面修改上条commit信息，保存：
+这里Git在执行到"feature1 first commit"便停了下来，提示我们可以通过amend来修改这条commit记录，amend就是用来修改HEAD所指向的这条最新记录，这个具体下面会讲。我们输入git commit --amend，然后进入编辑页面修改上条commit信息，保存：
 
 ![](https://i.imgur.com/eIlqrDy.png)
 
@@ -80,14 +80,14 @@ Git 中有两个「偏移符号」： ^ 和 ~，插楼说下
 
 -----
 
-**^ 的用法**：表示对当前指针指向的commit记录向前便宜，偏移数量就是^的数量，例如：	HEAD^^^，表示的是HEAD所指向的那个commit往前三个的那条commit记录，也就是图中圈出来我们要修改的那个commit前面的那个commit
+**^ 的用法**：表示对当前指针指向的commit记录向前偏移，偏移数量就是^的数量，例如：	HEAD^^^，表示的是HEAD所指向的那个commit往前三个的那条commit记录，也就是图中圈出来我们要修改的那个commit前面的那个commit
 
-**~ 的用法**：同样是当前指针的基础上往回偏移，偏移数量就是~后跟着的数字，例如：HEAD~3，表示的同样是图中错误的commit前面的那个
+**~ 的用法**：同样是当前指针的基础上往回偏移，偏移数量就是~后跟着的数字，例如：HEAD~3，表示的同样是图中错误的commit前面的那条commit
 
 -------
 记得我们文章上说过rebase吗，它其实是对分支重设基础点的一个操作，在对别的分支操作时，会找被rebase的分支和要rebase到的分支两个分支的交点，也就是被rebase的分支的一个基础点，分叉点，然后对从基础点分叉出来的提交重新设置为要rebase到的分支最新一条记录
 
-所以这里git rebase -i HEAD^^^，rebase后面跟着的是一个自己分支的某个提交记录，实际上就是对rebase -i 后面跟着的那条记录开始（不包括）往后的所有commit重新设置基础点，把这些commit复制一遍再接在这个新的基础点后面（不太贴切，但是原谅我真的找不到更好理解的话了），对于文件历史变化来说，这个其实就是空操作
+所以这里git rebase -i HEAD^^^，rebase后面跟着的是一个自己分支的某个提交记录，实际上就是对rebase -i 后面跟着的那条记录开始（不包括开始点）往后的所有commit重新设置基础点，把这些commit重新生成一遍再接在这个新的基础点后面，对于文件历史变化来说，这个其实就是空操作
 
 ![](https://i.imgur.com/hZnVzCb.png)
 
@@ -113,7 +113,7 @@ git commit --amend是对上一条commit命令进行修正。当我们执行这�
 
 ![](https://i.imgur.com/UnJxTc3.jpg)
 
-回忆一下vim的操作哈，修改完保存退出，执行命令：
+回忆一下vim的操作，修改完保存退出，执行命令：
 
 ![](https://i.imgur.com/SwCAqn7.png)
 
@@ -147,7 +147,7 @@ amend用于修改上一条commit信息时，实际上并不是对上一个commit
 
 ![](https://i.imgur.com/TMjqjSB.png)
 
-log看下commit记录，我们丢弃的那条已经恢复，并且head指向它
+log看下commit记录，我们丢弃的那条已经恢复，并且head指向它。
 
 ### 参数 --hard --soft --mixed
 
@@ -211,7 +211,7 @@ log看下commit记录，我们丢弃的那条已经恢复，并且head指向它
 
 ![](https://i.imgur.com/XdgswgW.png)
 
-：wq！保存退出vim，gitlog看下现在的历史记录：
+：wq！保存退出vim，git log看下现在的历史记录：
 
 ![](https://i.imgur.com/RiTwPvw.png)
 
@@ -227,7 +227,7 @@ feature4's 2nd那条记录已经不在历史记录中
 
 假设我们再1245这条分支上，对123（master)执行rebase不带任何参数,默认我们所在分支的起点是2，2后面的4和5会复制出来一个6和7接在3后面
 
-如果我只想把 5 提交到 3 上，不想附带上 4，那么我可以执行：
+如果我只想把5提交到3上，不想附带上4，那么我可以执行：
 
 	git rebase --onto 3 4 5 //345分别是commit记录的代指
 
@@ -250,7 +250,7 @@ feature4's 2nd那条记录已经不在历史记录中
 
 这时，如果你本来就希望用本地的内容覆盖掉中央仓库的内容，并且有足够的把握不会影响别的同事的代码，那么就不要按照提示去先pull再push了，而是要选择「强行」push：
 
-	git push origin 分支名 -f
+	git push origin 分支名 -f //-f force 强制
 
 但是在我们分支协作开发时，在向master分支提交代码时，是不应该用-f的，因为这样很容易让我们本地的内容覆盖或者影响同事们提交上去的代码。那这个时候如果我们想要撤销某次提交对应的改动要怎么办呢？
 
@@ -266,11 +266,11 @@ git revert会生成一个与后面对应的commit记录相反的一次文件提�
 
 #### git checkout
 
-上面我们讲到过，在我们执行git checkout branch分支名的时候，HEAD会指向这个分支，同时两者都指向这个分支最新的那条commit记录。其实我们操作的这些分支，他就是我们的一种理解，本质上它也是一个指针，对应着commit记录，所以checkout后面也可以直接指定某一条commit记录。
+上面我们讲到过，在我们执行git checkout branch分支名的时候，HEAD会指向这个分支，同时两者都指向这个分支最新的那条commit记录。其实我们操作的这些分支，就是我们的一种理解，本质上它也是一个指针，对应着commit记录，所以checkout后面也可以直接指定某一条commit记录。
 
 但是不一样的是，在我们checkout到某一条特定的commit记录时，HEAD和分支就脱离了，我们只是让HEAD指向了我们指定的记录，而所在的分支的指针并没有同步过来。
 
-checkout 本质上的功能其实是签出到指定的 commit记录的一种操作。
+checkout本质上的功能其实是签出到指定的commit记录的一种操作。
 
 ![](https://i.imgur.com/TMcNvM3.png)
 
@@ -300,7 +300,7 @@ stash指令可以帮你把工作目录的内容全部放在你本地的一个独
 
 #### 涉及到的命令：git reflog
 
-它是Git仓库中引用的移动记录，如果不指定引用，git log默认展示HEAD所指向的一个顺序的提交列表。它不是本地仓库的一部分，它单独存储，而且在pushe，fetche或者clone时不包括它，它纯属是本地的一个操作的记录。 
+它是Git仓库中引用的移动记录，如果不指定引用，git log默认展示HEAD所指向的一个顺序的提交列表。它不是本地仓库的一部分，它单独存储，而且在push，fetch或者clone时都不包括它，它纯属是本地的一个操作的记录。 
 
 ![](https://i.imgur.com/hPuHV3x.png)
 
@@ -310,9 +310,11 @@ stash指令可以帮你把工作目录的内容全部放在你本地的一个独
 - HEAD值：同样用来标识版本，但是不同于版本号的是，Head值是相对的。括号里的值越小，表示版本越新
 - 描述：操作行为的描述，包括我们commit的信息或者分支的切换等。
 
-reflog为每一条操作显示其对应的id版本号，这个id可以很好地帮助我们你恢复误操作的数据，例如我们错误地reset了一个旧的提交，或者rebase等操作，这个时候我们可以使用reflog去查看在误操作之前的信息，并且使用git reset去恢复之前的某一次操作状态，操作过后依然可以在reflog中看到状态之后的所有操作记录
+reflog为每一条操作显示其对应的id版本号，这个id可以很好地帮助我们你恢复误操作的数据，例如我们错误地reset了一个旧的提交，或者rebase等操作，这个时候我们可以使用reflog去查看在误操作之前的信息，并且使用git reset 版本号，去恢复之前的某一次操作状态，操作过后依然可以在reflog中看到状态之后的所有操作记录
 
 区别于git log，log显示的是所有本地版本库的提交信息，commit记录，且不能察看已经删除了的commit记录。而git reflog可以查看所有分支的所有操作记录（包括commit和reset的操作），包括已经被删除的commit记录，几乎所有的操作都记录在其中，随时可以回滚。
+
+基本操作大概就这么多啦，谢谢你看到了这里，不对的地方还请多多指教！
 
 参考文章：
 https://www.jianshu.com/p/4f8b56d0fd5b
