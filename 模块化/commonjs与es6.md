@@ -122,3 +122,7 @@ ES6 处理“循环加载”与 CommonJS 有本质的不同。ES6 模块是动�
 这是因为函数具有提升作用，在执行import {bar} from './b'时，函数foo就已经有定义了，所以b.mjs加载的时候不会报错。
 
 这也意味着，如果把函数foo改写成函数表达式，也会报错。
+	
+	// a.mjsimport {bar} from './b';console.log('a.mjs');console.log(bar());const foo = () => 'foo';export {foo};
+
+上面代码的第四行，改成了函数表达式，就不具有提升作用，执行就会报错。
