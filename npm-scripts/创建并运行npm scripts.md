@@ -1,4 +1,4 @@
-##npm scripts
+##起步 为项目添加eslint检查
 
 #### npm 是如何管理和执行各种 scripts 的呢？
 
